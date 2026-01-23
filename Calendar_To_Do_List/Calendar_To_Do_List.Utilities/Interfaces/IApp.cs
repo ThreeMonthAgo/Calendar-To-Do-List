@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Calendar_To_Do_List;
@@ -19,5 +22,25 @@ public interface IApp
 
     #endregion
 
+    #region Functions
+
+    public static void ShutdownApp()
+    {
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime app)
+        {
+            app.Shutdown();
+        }
+    }
+
+    #endregion
+
     public static IHost Host;
+
+    public static T GetService<T>()
+    {
+        if (Host is null) throw new Exception("Host is null");
+        var s = Host.Services.GetService<T>();
+        if (s != null) return s;
+        else throw new ArgumentException($"Service {typeof(T)} is null!");
+    }
 }

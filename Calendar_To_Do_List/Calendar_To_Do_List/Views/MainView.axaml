@@ -11,13 +11,13 @@
     <vm:MainViewModel/>
   </Design.DataContext>
 
-  <Grid ColumnDefinitions="250, *">
+  <Grid ColumnDefinitions="auto, *">
 
     <!-- 左侧导航栏 -->
     <Border Grid.Column="0" Background="#f9f9f9" BorderBrush="#e5e5e5" BorderThickness="0,0,1,0">
       <Grid RowDefinitions="*, Auto" Margin="0,50,0,10">
         <StackPanel Grid.Row="0">
-          <TextBlock Text="CalenderToDoList" Margin="10,0,0,20" FontWeight="Bold" Foreground="#2564cf" FontSize="26"/>
+          <TextBlock Text="Calender To Do List" Margin="10,0,10,20" FontWeight="Bold" Foreground="#2564cf" FontSize="26"/>
           <ListBox Background="Transparent" BorderThickness="0">
             <ListBoxItem Content="任务" Padding="20,10" IsSelected="True"/>
           </ListBox>
