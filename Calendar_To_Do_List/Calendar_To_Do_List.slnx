@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="Calendar_To_Do_List.Android/Calendar_To_Do_List.Android.csproj" />
+  <Project Path="Calendar_To_Do_List.Browser/Calendar_To_Do_List.Browser.csproj" />
+  <Project Path="Calendar_To_Do_List.Desktop/Calendar_To_Do_List.Desktop.csproj" />
+  <Project Path="Calendar_To_Do_List/Calendar_To_Do_List.csproj" />
+</Solution>
