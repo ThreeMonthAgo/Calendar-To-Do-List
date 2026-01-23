@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CalenderToDoList.Models
+namespace Calender_To_Do_List.Models
 {
     public class ToDoTerm
     {

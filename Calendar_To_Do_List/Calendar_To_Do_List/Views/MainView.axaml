@@ -1,16 +1,129 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Calendar_To_Do_List.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="Calendar_To_Do_List.Views.MainView"
              x:DataType="vm:MainViewModel">
+
   <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
+    <vm:MainViewModel/>
   </Design.DataContext>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+  <Grid ColumnDefinitions="250, *">
+
+    <!-- 左侧导航栏 -->
+    <Border Grid.Column="0" Background="#f9f9f9" BorderBrush="#e5e5e5" BorderThickness="0,0,1,0">
+      <Grid RowDefinitions="*, Auto" Margin="0,50,0,10">
+        <StackPanel Grid.Row="0">
+          <TextBlock Text="CalenderToDoList" Margin="10,0,0,20" FontWeight="Bold" Foreground="#2564cf" FontSize="26"/>
+          <ListBox Background="Transparent" BorderThickness="0">
+            <ListBoxItem Content="任务" Padding="20,10" IsSelected="True"/>
+          </ListBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Spacing="2" Margin="10,0,10,10">
+          <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="Transparent" Padding="10,8" Command="{Binding ExportIcsCommand}">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="📅" Margin="0,0,10,0"/>
+              <TextBlock Text="导出为 .ics 文件" VerticalAlignment="Center" FontSize="14"/>
+            </StackPanel>
+          </Button>
+
+          <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="Transparent" Padding="10,8" Foreground="#d13438" Command="{Binding ExitAppCommand}">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="🚪" Margin="0,0,10,0"/>
+              <TextBlock Text="退出程序" VerticalAlignment="Center" FontSize="14"/>
+            </StackPanel>
+          </Button>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- 右侧主内容区 -->
+    <Border Grid.Column="1" Background="#f3f3f3" Padding="30,50,30,20">
+      <Grid RowDefinitions="Auto, *, Auto">
+        <TextBlock Grid.Row="0" Text="待办清单" FontSize="24" FontWeight="SemiBold" Foreground="#2564cf" Margin="0,0,0,20"/>
+
+        <!-- 任务列表 -->
+        <ScrollViewer Grid.Row="1">
+          <ItemsControl ItemsSource="{Binding TodoItems}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border Background="White" CornerRadius="5" Margin="0,0,0,5" BoxShadow="0 1 3 0 #10000000">
+                  <Grid ColumnDefinitions="Auto, *" Margin="10">
+                    <CheckBox Grid.Column="0" IsChecked="{Binding IsDone}" VerticalAlignment="Center"/>
+
+                    <!-- 【修改点 1】使用 StackPanel 实现文字在上，日期在下 -->
+                    <StackPanel Grid.Column="1" Margin="10,0" VerticalAlignment="Center">
+                      <!-- 任务内容 -->
+                      <TextBlock Text="{Binding TaskContent}" FontSize="16" FontWeight="Normal"/>
+
+                      <!-- 日期信息：字号更小，颜色为灰色，仅在有日期时显示 -->
+                      <StackPanel Orientation="Horizontal" Margin="0,2,0,0"
+                                  IsVisible="{Binding DeadLine, Converter={x:Static ObjectConverters.IsNotNull}}">
+                        <TextBlock Text="📅" FontSize="10" Foreground="Gray" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding DeadLine, StringFormat='\{0:yyyy/MM/dd\}'}"
+                                   FontSize="12"
+                                   Foreground="Gray"
+                                   VerticalAlignment="Center"/>
+                      </StackPanel>
+                    </StackPanel>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+
+        <!-- 底部输入框 -->
+        <Border Grid.Row="2" Background="White" CornerRadius="5" Padding="5" Margin="0,10,0,0">
+          <Grid ColumnDefinitions="*, Auto, Auto, Auto">
+
+            <!-- 【修改点 2】TextBox 独立出来，不再包裹其他控件 -->
+            <TextBox Grid.Column="0"
+                     Text="{Binding NewTaskContent}"
+                     Watermark="添加任务"
+                     BorderThickness="0"
+                     VerticalContentAlignment="Center"
+                     Background="Transparent">
+              <TextBox.KeyBindings>
+                <KeyBinding Gesture="Enter" Command="{Binding AddTaskCommand}" />
+              </TextBox.KeyBindings>
+            </TextBox>
+
+            <!-- 【修改点 3】DatePicker 放在 TextBox 后面，占独立的一列 -->
+            <CalendarDatePicker Grid.Column="1"
+                                SelectedDate="{Binding NewTaskDate}"
+                                Watermark="截止日期"
+                                BorderThickness="0"
+                                Background="Transparent"
+                                VerticalAlignment="Center"
+                                Margin="5,0"/>
+
+            <Button Grid.Column="2"
+                    Command="{Binding DeleteLastTaskCommand}"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Width="35" Height="35"
+                    VerticalAlignment="Center">
+              <TextBlock Text="🗑️" FontSize="16" Foreground="#d13438" HorizontalAlignment="Center"/>
+            </Button>
+
+            <Button Grid.Column="3"
+                    Command="{Binding AddTaskCommand}"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Width="35" Height="35"
+                    VerticalAlignment="Center">
+              <TextBlock Text="+" FontSize="20" FontWeight="Bold" Foreground="#2564cf" HorizontalAlignment="Center"/>
+            </Button>
+          </Grid>
+        </Border>
+
+      </Grid>
+    </Border>
+
+  </Grid>
 </UserControl>
