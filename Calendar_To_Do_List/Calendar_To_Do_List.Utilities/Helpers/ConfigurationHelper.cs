@@ -1,8 +1,8 @@
 ﻿using System.IO;
 
-namespace Calendar_To_Do_List.Utilities;
+namespace Calendar_To_Do_List.Utilities.Helpers;
 
-public static class Configuration
+public static class ConfigurationHelper
 {
     public static void SaveConfiguration(string config, string path)
     {

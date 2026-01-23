@@ -2,34 +2,32 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
-using System.Linq;
 using Avalonia.Markup.Xaml;
-using Calendar_To_Do_List.ViewModels;
-using Calendar_To_Do_List.Views;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Calendar_To_Do_List.Utilities.Interfaces;
+using Calendar_To_Do_List.ViewModels;
+using Calendar_To_Do_List.Views;
+using Calendar_To_Do_List.Services;
 
 namespace Calendar_To_Do_List;
 
-public partial class App : Application
+public partial class App : Application, IApp
 {
-    #region Fields
-
-    /// <summary>The directory of the application</summary>
-    public readonly static string DataDir = Path.Combine(
-        Environment.GetFolderPath(
-            Environment.SpecialFolder.LocalApplicationData,
-            Environment.SpecialFolderOption.Create),
-        "Calendar To Do List");
-
-    public readonly static string SettingsPath = Path.Combine(DataDir, "settings.json");
-
-    #endregion
-
     public override void Initialize()
     {
-        if (!Directory.Exists(DataDir)) Directory.CreateDirectory(DataDir);
+        if (!Directory.Exists(IApp.DataDir)) Directory.CreateDirectory(IApp.DataDir);
+        IApp.Host = Host.CreateDefaultBuilder()
+            .ConfigureServices((context, services) =>
+            {
+                services.AddSingleton<IToDoService, ToDoService>();
+            })
+            .Build();
+
         AvaloniaXamlLoader.Load(this);
     }
 
