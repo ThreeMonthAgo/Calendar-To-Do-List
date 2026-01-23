@@ -6,13 +6,30 @@ using System.Linq;
 using Avalonia.Markup.Xaml;
 using Calendar_To_Do_List.ViewModels;
 using Calendar_To_Do_List.Views;
+using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace Calendar_To_Do_List;
 
 public partial class App : Application
 {
+    #region Fields
+
+    /// <summary>The directory of the application</summary>
+    public readonly static string DataDir = Path.Combine(
+        Environment.GetFolderPath(
+            Environment.SpecialFolder.LocalApplicationData,
+            Environment.SpecialFolderOption.Create),
+        "Calendar To Do List");
+
+    public readonly static string SettingsPath = Path.Combine(DataDir, "settings.json");
+
+    #endregion
+
     public override void Initialize()
     {
+        if (!Directory.Exists(DataDir)) Directory.CreateDirectory(DataDir);
         AvaloniaXamlLoader.Load(this);
     }
 
