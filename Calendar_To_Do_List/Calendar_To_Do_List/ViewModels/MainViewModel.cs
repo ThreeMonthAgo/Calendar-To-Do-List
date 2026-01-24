@@ -1,27 +1,29 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using Avalonia;
 using Calendar_To_Do_List.Utilities.Interfaces;
-using Calender_To_Do_List.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Ical.Net.CalendarComponents;
+using Ical.Net.Proxies;
 
 namespace Calendar_To_Do_List.ViewModels
 {
     public partial class MainViewModel : ViewModelBase
     {
         private readonly ITodoService _todoService;
+        private readonly ICalendarService _calendarService;
 
-        public ObservableCollection<Todo> TodoItems => _todoService.TodoCollection;
+        public IUniqueComponentList<Todo> TodoItems => _todoService.Todos;
 
         [ObservableProperty] public string _newTaskContent = String.Empty;
         [ObservableProperty] public DateTime? _newTaskDate;
 
-        public MainViewModel(ITodoService todoService)
+        public MainViewModel(ITodoService todoService, ICalendarService calendarService)
         {
             _todoService = todoService;
+            _calendarService = calendarService;
 
             // 初始测试数据
             _todoService.CreateToDo(
@@ -35,7 +37,8 @@ namespace Calendar_To_Do_List.ViewModels
         [RelayCommand]
         private void ExportIcs()
         {
-            _todoService.ExportToIcs();
+            // TODO
+            // _calendarService.Export("path/to/export");
         }
 
         [RelayCommand]
@@ -62,7 +65,7 @@ namespace Calendar_To_Do_List.ViewModels
         {
             if (TodoItems.Count > 0)
             {
-                TodoItems.RemoveAt(TodoItems.Count - 1);
+                TodoItems.Remove(TodoItems.Last());
             }
         }
     }

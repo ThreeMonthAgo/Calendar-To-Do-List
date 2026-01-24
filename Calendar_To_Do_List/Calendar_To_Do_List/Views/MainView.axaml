@@ -53,7 +53,7 @@
               <DataTemplate>
                 <Border Background="White" CornerRadius="5" Margin="0,0,0,5" BoxShadow="0 1 3 0 #10000000">
                   <Grid ColumnDefinitions="Auto, *" Margin="10">
-                    <CheckBox Grid.Column="0" IsChecked="{Binding IsCompleted}" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Column="0" IsChecked="{Binding IsCompleted, Mode=OneTime}" VerticalAlignment="Center"/>
 
                     <!-- 【修改点 1】使用 StackPanel 实现文字在上，日期在下 -->
                     <StackPanel Grid.Column="1" Margin="10,0" VerticalAlignment="Center">
