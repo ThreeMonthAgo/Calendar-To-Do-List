@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Security.Cryptography;
-using System.Text;
 using Calendar_To_Do_List.Utilities.Interfaces;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 
 namespace Calendar_To_Do_List.Services;
 
-public class ToDoService : IToDoService
+public class ToDoService : ITodoService
 {
-    //                Uid     Todo
-    public Dictionary<string, Todo> TodoDictionary = [];
+    public ObservableCollection<Todo> TodoCollection { get; set; } = [];
 
     public Todo CreateToDo(string summary, string description, int priority, CalDateTime dueDate)
     {
@@ -23,18 +20,24 @@ public class ToDoService : IToDoService
             Priority = priority,
             Due = dueDate
         };
-        TodoDictionary.Add(t.Uid, t);
+        TodoCollection.Add(t);
         return t;
     }
 
-    public void CompleteToDo(string Uid, CalDateTime? deadLine = null)
+    public void CompleteToDo(Todo todo, CalDateTime? completeDate = null)
     {
-        if (!TodoDictionary.TryGetValue(Uid, out Todo t)) return;
-        CompleteToDo(t, deadLine);
+        if (!TodoCollection.Contains(todo)) return;
+        todo.Completed = new(completeDate ?? CalDateTime.UtcNow);
     }
 
-    public void CompleteToDo(Todo todo, CalDateTime? deadLine = null)
+    public void DeleteToDo(Todo todo)
     {
-        todo.Completed = new(deadLine ?? CalDateTime.Now);
+        if (!TodoCollection.Contains(todo)) return;
+        TodoCollection.Remove(todo);
+    }
+
+    public void ExportToIcs()
+    {
+        // TODO
     }
 }

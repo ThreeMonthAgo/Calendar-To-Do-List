@@ -2,29 +2,40 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Avalonia;
+using Calendar_To_Do_List.Utilities.Interfaces;
 using Calender_To_Do_List.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Ical.Net.CalendarComponents;
 
 namespace Calendar_To_Do_List.ViewModels
 {
     public partial class MainViewModel : ViewModelBase
     {
-        public ObservableCollection<ToDoTerm> TodoItems { get; set; } = [];
+        private readonly ITodoService _todoService;
+
+        public ObservableCollection<Todo> TodoItems => _todoService.TodoCollection;
 
         [ObservableProperty] public string _newTaskContent = String.Empty;
-        [ObservableProperty] public DateTimeOffset? _newTaskDate;
+        [ObservableProperty] public DateTime? _newTaskDate;
 
-        public MainViewModel()
+        public MainViewModel(ITodoService todoService)
         {
+            _todoService = todoService;
+
             // 初始测试数据
-            TodoItems.Add(new ToDoTerm { TaskContent = "完成项目开发", IsDone = false, DeadLine = DateTime.Now });
+            _todoService.CreateToDo(
+                    string.Empty,
+                    "Test",
+                    0,
+                    new Ical.Net.DataTypes.CalDateTime(DateTime.UtcNow)
+                );
         }
 
         [RelayCommand]
         private void ExportIcs()
         {
-            // TODO: Export
+            _todoService.ExportToIcs();
         }
 
         [RelayCommand]
@@ -35,14 +46,12 @@ namespace Calendar_To_Do_List.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(NewTaskContent))
             {
-                TodoItems.Add(new ToDoTerm
-                {
-                    TaskContent = NewTaskContent,
-                    IsDone = false,
-                    // 直接赋值，不再需要 .DateTime
-                    DeadLine = NewTaskDate
-                });
-
+                _todoService.CreateToDo(
+                        string.Empty,
+                        NewTaskContent,
+                        0,
+                        new Ical.Net.DataTypes.CalDateTime(NewTaskDate ?? DateTime.UtcNow)
+                    );
                 NewTaskContent = string.Empty;
                 NewTaskDate = null;
             }

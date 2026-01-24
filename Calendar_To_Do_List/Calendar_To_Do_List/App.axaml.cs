@@ -24,7 +24,8 @@ public partial class App : Application, IApp
         IApp.Host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<IToDoService, ToDoService>();
+                services.AddSingleton<ITodoService, ToDoService>();
+                services.AddSingleton<MainViewModel>();
             })
             .Build();
 
@@ -40,14 +41,14 @@ public partial class App : Application, IApp
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel()
+                DataContext = IApp.GetService<MainViewModel>()
             };
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = new MainViewModel()
+                DataContext = IApp.GetService<MainViewModel>()
             };
         }
 
