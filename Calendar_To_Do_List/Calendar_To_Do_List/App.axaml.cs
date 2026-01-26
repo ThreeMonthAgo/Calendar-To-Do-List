@@ -1,10 +1,5 @@
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Calendar_To_Do_List.Services;
@@ -13,6 +8,8 @@ using Calendar_To_Do_List.ViewModels;
 using Calendar_To_Do_List.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IO;
+using System.Linq;
 
 namespace Calendar_To_Do_List;
 
@@ -24,8 +21,7 @@ public partial class App : Application, IApp
         IApp.Host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<ITodoService, TodoService>();
-                services.AddSingleton<ICalendarService, CalendarService>();
+                services.AddSingleton<ITodoService, ToDoService>();
                 services.AddSingleton<MainViewModel>();
             })
             .Build();

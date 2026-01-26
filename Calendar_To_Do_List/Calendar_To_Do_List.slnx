@@ -2,8 +2,12 @@
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />
   </Folder>
-  <Project Path="Calendar_To_Do_List.Android/Calendar_To_Do_List.Android.csproj" />
-  <Project Path="Calendar_To_Do_List.Browser/Calendar_To_Do_List.Browser.csproj" />
+  <Project Path="Calendar_To_Do_List.Android/Calendar_To_Do_List.Android.csproj">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
+  <Project Path="Calendar_To_Do_List.Browser/Calendar_To_Do_List.Browser.csproj">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
   <Project Path="Calendar_To_Do_List.Desktop/Calendar_To_Do_List.Desktop.csproj" />
   <Project Path="Calendar_To_Do_List.Test/Calendar_To_Do_List.Test.csproj" Id="87ad4ca3-4eee-4222-bd82-0ea7458f2c24" />
   <Project Path="Calendar_To_Do_List.Utilities/Calendar_To_Do_List.Utilities.csproj" Id="a11cb117-9b20-4c16-b332-317203b94b2a" />

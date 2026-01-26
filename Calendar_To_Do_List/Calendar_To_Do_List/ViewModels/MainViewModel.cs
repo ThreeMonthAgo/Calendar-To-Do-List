@@ -1,60 +1,59 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
-using Avalonia;
 using Calendar_To_Do_List.Utilities.Interfaces;
+using Calender_To_Do_List.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Ical.Net.CalendarComponents;
-using Ical.Net.Proxies;
+using Ical.Net;
+using Ical.Net.DataTypes;
 
 namespace Calendar_To_Do_List.ViewModels
 {
     public partial class MainViewModel : ViewModelBase
     {
         private readonly ITodoService _todoService;
-        private readonly ICalendarService _calendarService;
 
-        public IUniqueComponentList<Todo> TodoItems => _todoService.Todos;
+        // UI 绑定的数据源
+        public ObservableCollection<ToDoTerm> TodoItems { get; } = new();
 
-        [ObservableProperty] public string _newTaskContent = String.Empty;
-        [ObservableProperty] public DateTime? _newTaskDate;
+        [ObservableProperty] private string _newTaskContent = string.Empty;
+        [ObservableProperty] private DateTime? _newTaskDate;
 
-        public MainViewModel(ITodoService todoService, ICalendarService calendarService)
+        public MainViewModel(ITodoService todoService)
         {
             _todoService = todoService;
-            _calendarService = calendarService;
 
-            // 初始测试数据
-            _todoService.CreateToDo(
-                    string.Empty,
-                    "Test",
-                    0,
-                    new Ical.Net.DataTypes.CalDateTime(DateTime.UtcNow)
-                );
+            // 同步 Service 里的初始数据到 UI
+            foreach (var item in _todoService.TodoCollection)
+            {
+                TodoItems.Add(new ToDoTerm
+                {
+                    TaskContent = item.Summary,
+                    IsDone = item.Status == TodoStatus.Completed,
+                    DeadLine = item.Start?.Value
+                });
+            }
         }
-
-        [RelayCommand]
-        private void ExportIcs()
-        {
-            // TODO
-            // _calendarService.Export("path/to/export");
-        }
-
-        [RelayCommand]
-        private void ExitApp() => IApp.ShutdownApp();
 
         [RelayCommand]
         private void AddTask()
         {
             if (!string.IsNullOrWhiteSpace(NewTaskContent))
             {
-                _todoService.CreateToDo(
-                        string.Empty,
-                        NewTaskContent,
-                        0,
-                        new Ical.Net.DataTypes.CalDateTime(NewTaskDate ?? DateTime.UtcNow)
-                    );
+                var dueDate = NewTaskDate.HasValue ? new CalDateTime(NewTaskDate.Value) : new CalDateTime(DateTime.UtcNow);
+
+                // 1. 同步到逻辑层 (Ical.Net)
+                _todoService.CreateToDo(NewTaskContent, string.Empty, 0, dueDate);
+
+                // 2. 同步到 UI 层
+                TodoItems.Add(new ToDoTerm
+                {
+                    TaskContent = NewTaskContent,
+                    IsDone = false,
+                    DeadLine = NewTaskDate
+                });
+
                 NewTaskContent = string.Empty;
                 NewTaskDate = null;
             }
@@ -65,8 +64,16 @@ namespace Calendar_To_Do_List.ViewModels
         {
             if (TodoItems.Count > 0)
             {
-                TodoItems.Remove(TodoItems.Last());
+                TodoItems.RemoveAt(TodoItems.Count - 1);
+                if (_todoService.TodoCollection.Count > 0)
+                {
+                    var lastServiceItem = _todoService.TodoCollection.Last();
+                    _todoService.DeleteToDo(lastServiceItem);
+                }
             }
         }
+
+        [RelayCommand] private void ExportIcs() => _todoService.ExportToIcs();
+        [RelayCommand] private void ExitApp() => IApp.ShutdownApp();
     }
 }
