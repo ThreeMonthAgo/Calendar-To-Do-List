@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using Calendar_To_Do_List.Services;
 using Calendar_To_Do_List.Utilities.Interfaces;
-using Ical.Net.DataTypes;
 
 namespace Calendar_To_Do_List.Test.Services
 {
     [TestClass]
-    public sealed class ToDoServiceTest
+    public sealed class TodoServiceTest
     {
         private readonly ITodoService tds = new TodoService();
 
