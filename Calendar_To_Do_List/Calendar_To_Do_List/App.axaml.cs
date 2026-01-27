@@ -21,7 +21,7 @@ public partial class App : Application, IApp
         IApp.Host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<ITodoService, ToDoService>();
+                services.AddSingleton<ITodoService, TodoService>();
                 services.AddSingleton<MainViewModel>();
             })
             .Build();

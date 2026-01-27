@@ -1,48 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Calendar_To_Do_List.Utilities.DataType;
 using Calendar_To_Do_List.Utilities.Interfaces;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 
 namespace Calendar_To_Do_List.Services;
 
-public class ToDoService : ITodoService
+public class TodoService : ITodoService
 {
-    public ObservableCollection<Todo> TodoCollection { get; set; } = [];
+    public ObservableCollection<TodoTerm> TodoTermCollection { get; set; } = [];
 
-    public Todo CreateToDo(string summary, string description, int priority, CalDateTime dueDate)
+    public TodoTerm CreateTodo(string? summary, string description, int priority, DateTime? dueDate = null)
     {
-        Todo t = new()
+        TodoTerm t = new()
         {
             Summary = summary,
             Description = description,
             Priority = priority,
             Due = dueDate
         };
-        TodoCollection.Add(t);
+        TodoTermCollection.Add(t);
         return t;
     }
 
-    public void CompleteToDo(Todo todo, CalDateTime? completeDate = null)
+    public void CompleteTodo(TodoTerm todo, DateTime? completedDate = null)
     {
-        if (!TodoCollection.Contains(todo)) return;
-        todo.Completed = new(completeDate ?? CalDateTime.UtcNow);
+        todo.IsCompleted = true;
+        todo.CompletedTime = completedDate ?? DateTime.UtcNow;
     }
 
-    public void DeleteToDo(Todo todo)
+    public void DeleteTodo(TodoTerm todo)
     {
-        if (!TodoCollection.Contains(todo)) return;
-        TodoCollection.Remove(todo);
-    }
-
-    public void ExportToIcs()
-    {
-        // TODO
-    }
-
-    public ObservableCollection<Todo> GetTodos()
-    {
-        throw new NotImplementedException();
+        TodoTermCollection.Remove(todo);
     }
 }
