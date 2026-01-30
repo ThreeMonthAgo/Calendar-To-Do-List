@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Calendar_To_Do_List.Utilities.DataType;
 using Calendar_To_Do_List.Utilities.Interfaces;
-using Ical.Net.CalendarComponents;
-using Ical.Net.DataTypes;
 
 namespace Calendar_To_Do_List.Services;
 
@@ -12,12 +10,12 @@ public class TodoService : ITodoService
 {
     public ObservableCollection<TodoTerm> TodoTermCollection { get; set; } = [];
 
-    public TodoTerm CreateTodo(string? summary, string description, int priority, DateTime? dueDate = null)
+    public TodoTerm CreateTodo(string? summary, string? description, int priority, DateTime? dueDate = null)
     {
         TodoTerm t = new()
         {
-            Summary = summary,
-            Description = description,
+            Summary = summary ?? string.Empty,
+            Description = description ?? string.Empty,
             Priority = priority,
             Due = dueDate
         };
@@ -35,9 +33,4 @@ public class TodoService : ITodoService
     {
         TodoTermCollection.Remove(todo);
     }
-
-
-
-
-    
 }

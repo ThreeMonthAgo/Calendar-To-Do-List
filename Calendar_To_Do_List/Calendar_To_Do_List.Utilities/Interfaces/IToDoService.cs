@@ -7,7 +7,7 @@ public interface ITodoService
 {
     public ObservableCollection<TodoTerm> TodoTermCollection { get; set; }
 
-    public TodoTerm CreateTodo(string? summary, string description, int priority, DateTime? dueDate = null);
+    public TodoTerm CreateTodo(string? summary, string? description, int priority, DateTime? dueDate = null);
 
     public void CompleteTodo(TodoTerm todo, DateTime? completedDate = null);
 

@@ -1,17 +1,20 @@
 ﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 
 namespace Calendar_To_Do_List.Utilities.DataType
 {
-    public class TodoTerm
+    public partial class TodoTerm : ObservableObject
     {
-        public string? Summary { get; set; } = string.Empty;
+        [ObservableProperty]
+        public string summary = string.Empty;
 
-        /// <remarks>Description is necessary</remarks>
-        public required string Description { get; set; } = string.Empty;
+        [ObservableProperty]
+        public string description = string.Empty;
 
-        public int Priority { get; set; } = 0;
+        [ObservableProperty]
+        public int priority = 0;
 
         /// <remarks>
         /// Ensure it's a UTC time. e.g.
@@ -19,15 +22,18 @@ namespace Calendar_To_Do_List.Utilities.DataType
         /// Due = new DateTime(2026,1,1,0,0,0,DateTimeKind.Utc);
         /// </code>
         /// </remarks>
-        public DateTime? Due { get; set; }
+        [ObservableProperty]
+        public DateTime? due;
 
-        public bool IsCompleted { get; set; } = false;
+        [ObservableProperty]
+        public bool isCompleted = false;
 
         /// <remarks>
         /// Ensure it's a UTC time.
         /// <seealso cref="Due"/>
         /// </remarks>
-        public DateTime? CompletedTime { get; set; }
+        [ObservableProperty]
+        public DateTime? completedTime;
 
         public static implicit operator Todo(TodoTerm v)
         {

@@ -5,16 +5,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Ical.Net;
 using Ical.Net.DataTypes;
-using Calendar_To_Do_List.Utilities.DataType;
-
-
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-
-
-
 
 namespace Calendar_To_Do_List.ViewModels
 {
@@ -23,17 +16,15 @@ namespace Calendar_To_Do_List.ViewModels
         private readonly ITodoService _todoService;
         private readonly ICalendarService _calendarService;
 
-       
-        
-
         // UI 绑定的数据源
         public ObservableCollection<TodoTerm> TodoItems => _todoService.TodoTermCollection;
 
         [ObservableProperty] private string _newTaskContent = string.Empty;
         [ObservableProperty] private DateTime? _newTaskDate;
         [ObservableProperty] private TimeSpan? _newTaskTime;
-        [ObservableProperty] private bool _isSidebarCollapsed; public double SidebarWidth => IsSidebarCollapsed ? 50 : 250;
-
+        [ObservableProperty] private bool _isSidebarCollapsed;
+        
+        public double SidebarWidth => IsSidebarCollapsed ? 40 : 250;
 
         [RelayCommand]
         private void ToggleSidebar()
@@ -49,27 +40,17 @@ namespace Calendar_To_Do_List.ViewModels
         }
 
         [RelayCommand]
+        private void ExportIcs()
+        {
+            // TODO: Export
+        }
+
+        [RelayCommand]
         private void AddTask()
         {
             if (!string.IsNullOrWhiteSpace(NewTaskContent))
             {
-
-                var dueDate = NewTaskDate.HasValue ? new CalDateTime(NewTaskDate.Value) : new CalDateTime(DateTime.UtcNow);
-
-                // 1. 同步到逻辑层 (Ical.Net)
-                _todoService.CreateToDo(NewTaskContent, string.Empty, 0, dueDate);
-
-                // 2. 同步到 UI 层
-                TodoItems.Add(new ToDoTerm
-                {
-                    TaskContent = NewTaskContent,
-                    IsDone = false,
-                    DeadLine = NewTaskDate
-                });
-
-
                 DateTime? finalDate = null;
-
 
                 if (NewTaskDate.HasValue)
                 {
@@ -109,14 +90,6 @@ namespace Calendar_To_Do_List.ViewModels
             }
         }
 
-        [RelayCommand] private void ExportIcs()
-        {
-            // TODO: Export
-        }
-
-
-        [RelayCommand] private void ExportIcs() => _todoService.ExportToIcs();
-
         [RelayCommand]
         private void ToggleTheme()
         {
@@ -136,14 +109,6 @@ namespace Calendar_To_Do_List.ViewModels
             }
         }
 
-
-
-        [RelayCommand] private void ExportIcs()
-        {
-            // TODO: Export
-        }
-
->>>>>>> Stashed changes
         [RelayCommand] private void ExitApp() => IApp.ShutdownApp();
     }
 }
