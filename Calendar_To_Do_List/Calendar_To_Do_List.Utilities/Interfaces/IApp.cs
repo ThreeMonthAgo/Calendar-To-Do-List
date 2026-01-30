@@ -26,7 +26,7 @@ public interface IApp
 
     public static void ShutdownApp()
     {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime app)
+        if (Application.Current?.ApplicationLifetime is IControlledApplicationLifetime app)
         {
             app.Shutdown();
         }

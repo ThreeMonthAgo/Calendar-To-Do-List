@@ -13,6 +13,7 @@ namespace Calendar_To_Do_List.ViewModels
     public partial class MainViewModel : ViewModelBase
     {
         private readonly ITodoService _todoService;
+        private readonly ICalendarService _calendarService;
 
         // UI 绑定的数据源
         public ObservableCollection<TodoTerm> TodoItems => _todoService.TodoTermCollection;
@@ -20,9 +21,10 @@ namespace Calendar_To_Do_List.ViewModels
         [ObservableProperty] private string _newTaskContent = string.Empty;
         [ObservableProperty] private DateTime? _newTaskDate;
 
-        public MainViewModel(ITodoService todoService)
+        public MainViewModel(ITodoService todoService, ICalendarService calendarService)
         {
             _todoService = todoService;
+            _calendarService = calendarService;
         }
 
         [RelayCommand]

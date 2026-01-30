@@ -22,6 +22,7 @@ public partial class App : Application, IApp
             .ConfigureServices((context, services) =>
             {
                 services.AddSingleton<ITodoService, TodoService>();
+                services.AddSingleton<ICalendarService, CalendarService>();
                 services.AddSingleton<MainViewModel>();
             })
             .Build();
