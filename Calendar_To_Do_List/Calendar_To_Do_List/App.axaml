@@ -12,4 +12,33 @@
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
+
+    <Application.Resources>
+        <!-- 定义主题字典 -->
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                
+                <!-- 1. 浅色模式配置 -->
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="SidebarBackground">#f9f9f9</SolidColorBrush>
+                    <SolidColorBrush x:Key="MainBackground">#f3f3f3</SolidColorBrush>
+                    <SolidColorBrush x:Key="CardBackground">#ffffff</SolidColorBrush>
+                    <SolidColorBrush x:Key="MainText">#000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="SubText">#616161</SolidColorBrush>
+                    <SolidColorBrush x:Key="SeparatorColor">#e5e5e5</SolidColorBrush>
+                </ResourceDictionary>
+
+                <!-- 2. 深色模式配置 (你刚才调好的颜色) -->
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="SidebarBackground">#1a1a1a</SolidColorBrush>
+                    <SolidColorBrush x:Key="MainBackground">#202020</SolidColorBrush>
+                    <SolidColorBrush x:Key="CardBackground">#2c2c2c</SolidColorBrush>
+                    <SolidColorBrush x:Key="MainText">#e3e3e3</SolidColorBrush>
+                    <SolidColorBrush x:Key="SubText">#8a8a8a</SolidColorBrush>
+                    <SolidColorBrush x:Key="SeparatorColor">#2d2d2d</SolidColorBrush>
+                </ResourceDictionary>
+                
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>
