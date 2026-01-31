@@ -8,8 +8,9 @@
              x:DataType="vm:MainViewModel">
   <UserControl.Styles>
     <Style Selector="TextBlock.done">
-      <Setter Property="TextDecorations" Value="{DynamicResource SystemControlDisabledBaseMediumLowBrush}"/>
-      <Setter Property="Foreground" Value="Gray"/>
+      <Setter Property="TextDecorations" Value="Strikethrough"/>
+      <Setter Property="Foreground" Value="{DynamicResource SubText}"/>
+      <Setter Property="Opacity" Value="0.5" />
     </Style>
 
     <Style Selector="Border#SidebarBorder">
@@ -99,7 +100,7 @@
                     <!-- 【修改点 1】使用 StackPanel 实现文字在上，日期在下 -->
                     <StackPanel Grid.Column="1" Margin="10,0" VerticalAlignment="Center">
                       <!-- 任务内容 -->
-                      <TextBlock Text="{Binding Description}" FontSize="16" FontWeight="Normal"/>
+                      <TextBlock Text="{Binding Description}" FontSize="16" FontWeight="Normal" Classes.done="{Binding IsCompleted}"/>
                       <!-- 日期信息：字号更小，颜色为灰色，仅在有日期时显示 -->
                       <StackPanel Orientation="Horizontal" Margin="0,2,0,0"
                                   IsVisible="{Binding Due, Converter={x:Static ObjectConverters.IsNotNull}}">
